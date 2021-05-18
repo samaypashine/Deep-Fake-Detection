@@ -41,14 +41,14 @@ def predict():
 
     # Iteration on Files.
     for File in predictions:
-        result = predictions[File][0]
+        result, result1 = predictions[File][0], predictions[File][1]
         print("[RESULT]. {} Prediction : ".format(File.split('/')[-1]), result)
 
         if np.round(result) == 0:
             label = tk.Label(root, text="Output:\n The Media File is Not Deep Fake. Accuracy Rate : {}".format(result*100))
             label.grid(row=6, column=1)
         else:
-            label = tk.Label(root, text="Output:\n The Media File is a Deep Fake. Accuracy Rate : {}".format(result*100))
+            label = tk.Label(root, text="Output:\n The Media File is a Deep Fake.")
             label.grid(row=6, column=1)
 
     Path.set('')
@@ -77,8 +77,6 @@ if __name__ == "__main__":
     root.title('Deep Fake Detection Software')
     Path = tk.StringVar()
 
-    opCycle = 1
-
     # Initializing the Classifier & Loading the Model.
     try:
         print("[INFO]. Initializing the CLassifiers.")
@@ -100,18 +98,18 @@ if __name__ == "__main__":
 
     #Sample Inference to intitate the operation pipeline.
     dataGenerator = ImageDataGenerator(rescale=1./255)
-    generator = dataGenerator.flow_from_directory('test_images', target_size=(256, 256),
+    generator = dataGenerator.flow_from_directory('dataGenerator', target_size=(256, 256),
                                                   batch_size=1, class_mode='binary', subset='training')
     X, y = generator.next()
     print("[INFO]. Running Sample Prediction")
     print("[INFO]. Predicted : ", imgClassifier.predict(X), ", Real class : ", y)
 
-    image = Image.open('/home/samay/Downloads/oie_16123843OnQMfZGh.jpg')
+    image = Image.open('./oie_16123843OnQMfZGh.jpg')
     photo = ImageTk.PhotoImage(image)
 
     # Create a File Explorer label
     label_file_explorer = tk.Label(root, image=photo,
-                                width=358, height=159)
+                                   width=358, height=159)
     ent1 = tk.Entry(root, font=40, width=30, textvariable=Path)
     label_file_explorer.grid(column=1, row=1)
     ent1.grid(row=2, column=1)
